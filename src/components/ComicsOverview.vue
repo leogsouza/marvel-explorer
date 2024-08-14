@@ -23,7 +23,7 @@ import type {Ref} from 'vue'
 
 import { useComics } from '@/composables/marvelApi'
 import type { Comic } from '@/types/marvel';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import LoadingIndicator from './LoadingIndicator.vue'
 import ComicCard from './ComicCard.vue';
@@ -31,6 +31,7 @@ import Pagination from './Pagination.vue';
 
 
 const route = useRoute()
+const router = useRouter()
 
 const isLoading: Ref<boolean> = ref(false);
 const data: Ref<Comic[] | undefined> = ref()
@@ -42,14 +43,20 @@ if (route.params.page) {
 }
 
 const getComics = async (page: number = 0) => {
-  isLoading.value = true;
-  const comics = await useComics(page);
+  try {
+    isLoading.value = true;
+    const comics = await useComics(page);
 
-  currentPage.value = comics?.offset / comics?.limit || 0;
-  totalPages.value = Math.ceil(comics.total / comics.limit);
+    currentPage.value = comics?.offset / comics?.limit || 0;
+    totalPages.value = Math.ceil(comics.total / comics.limit);
 
-  data.value = comics.results;
-  isLoading.value = false;
+    data.value = comics.results;
+    isLoading.value = false;  
+  } catch (error) {
+    console.log('error getting comics', error)
+    router.push({path: '/error', query:{info: error as string}})
+  }
+  
 }
 
 watch(

@@ -20,11 +20,21 @@ export const useMarvelAPI = async (path: Path, options: ApiOptions): Promise<Com
 }
 
 export const useComics = async (page: number = 0): Promise<Comics> => {
-  return await useMarvelAPI(Path.COMICS, { page }) as Comics
+  try {    
+    return await useMarvelAPI(Path.COMICS, { page }) as Comics
+  } catch (error) {
+    console.error(error)
+    throw new Error('An error occured while trying to read comics')
+  }
 }
 
 export const useCharacterSearch = async (query: string, page: number = 0): Promise<Characters> => {
-  return await useMarvelAPI(Path.CHARACTERS, { query: `nameStartsWith=${query}`, page}) as Characters
+  try {    
+    return await useMarvelAPI(Path.CHARACTERS, { query: `nameStartsWith=${query}`, page}) as Characters
+  } catch (error) {
+    console.error(error)
+    throw new Error('An error occurred while trying to search comics')
+  }
 }
 
 export const useFetch = async (requestURI: string): Promise<Comics | Characters> => {
