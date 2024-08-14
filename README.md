@@ -1,6 +1,6 @@
-# marvel-explorer
+# Marvel Explorer
 
-This template should help get you started developing with Vue 3 in Vite.
+Marvel explorer is a Vue 3 application that uses Marvel API to retrieve information about comics and characters
 
 ## Recommended IDE Setup
 
